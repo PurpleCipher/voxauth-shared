@@ -1,14 +1,13 @@
 import { Application } from "express";
 import { BaseServer, IServer, ServerConfig } from "./server";
 
-export default abstract class ExpressServer
-  extends BaseServer
-  implements IServer
-{
+export abstract class ExpressServer extends BaseServer implements IServer {
   abstract app: Application;
 
   abstract setupMiddlewares(): void;
+
   abstract setupRoutes(): void;
+
   protected constructor(config: ServerConfig) {
     super(config);
   }
