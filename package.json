@@ -1,5 +1,5 @@
 {
-  "name": "voxauth-shared",
+  "name": "@purple-cipher/voxauth-shared",
   "version": "0.1.0",
   "description": "Common code for voxauth services",
   "main": "dist/index.js",
@@ -8,6 +8,7 @@
     "/dist"
   ],
   "scripts": {
+    "build": "tsc",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "format:staged": "pretty-quick --staged",
     "lint": "eslint --ignore-path .eslintignore --ext .ts .",
@@ -40,5 +41,8 @@
   "dependencies": {
     "express": "^4.18.1",
     "fastify": "^4.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

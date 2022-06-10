@@ -1,0 +1,23 @@
+name: Version Bump
+on:
+  push:
+    branches:
+      - main
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Bump version"
+        uses: phips28/gh-action-bump-version@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          minor-wording: "feat,feature"
+          patch-wording: "fix,bug,chore,style"
+          major-wording: "breaking,breaking-changes,MAJOR"
+          rc-wording: "rc,release-candidate,alpha,beta,preview"
+          default: prerelease
+          tag-prefix: "v"
+          target-branch: "main"
+          commit-message: "CI: bumps version to {{version}} [skip ci]"
