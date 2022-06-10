@@ -19,5 +19,5 @@ jobs:
           rc-wording: "rc,release-candidate,alpha,beta,preview"
           default: prerelease
           tag-prefix: "v"
-          target-branch: "main"
+          target-branch: "versioning"
           commit-message: "CI: bumps version to {{version}}"
