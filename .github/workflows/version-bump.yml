@@ -20,4 +20,4 @@ jobs:
           default: prerelease
           tag-prefix: "v"
           target-branch: "main"
-          commit-message: "CI: bumps version to {{version}} [skip ci]"
+          commit-message: "CI: bumps version to {{version}}"
