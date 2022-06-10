@@ -7,7 +7,6 @@ on:
       - main
 jobs:
   test:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,5 +35,23 @@ jobs:
           rc-wording: "rc,release-candidate,alpha,beta,preview"
           default: prerelease
           tag-prefix: "v"
-          target-branch: "versioning"
-          commit-message: "CI: bumps version to {{version}}"
+          target-branch: "main"
+          commit-message: "CI: bumps version to {{version}} [skip ci]"
+  deploy-package:
+    needs: [test, version-bump]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: "refs/heads/main"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
