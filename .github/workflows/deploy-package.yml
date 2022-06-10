@@ -2,7 +2,7 @@ name: Deploy Package
 on:
   push:
     tags:
-      - "**"
+      - "*"
 jobs:
   deploy-package:
     runs-on: ubuntu-latest
