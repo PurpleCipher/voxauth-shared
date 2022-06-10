@@ -18,6 +18,7 @@ jobs:
           npm run lint
           npm test
   version-bump:
+    needs: [test]
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
