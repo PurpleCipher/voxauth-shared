@@ -1,10 +1,25 @@
 name: Version Bump
 on:
+  pull_request:
+    types: [opened, reopened]
   push:
     branches:
       - main
 jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: |
+          npm ci
+          npm run lint
+          npm test
   version-bump:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
