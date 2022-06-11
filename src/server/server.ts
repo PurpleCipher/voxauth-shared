@@ -1,17 +1,13 @@
-import { FastifyInstance } from "fastify";
 import { Application } from "express";
 
-export type ServerType = Application | FastifyInstance;
+export type ServerType = Application;
 
 type BaseServerConfig = {
   port: number;
   cb?: (...args: unknown[]) => void;
 };
 export type ExpressServerConfig = {};
-export type FastifyServerConfig = {};
-export type ServerConfig = BaseServerConfig &
-  ExpressServerConfig &
-  FastifyServerConfig;
+export type ServerConfig = BaseServerConfig & ExpressServerConfig;
 
 export interface IServer {
   app: ServerType;
