@@ -41,7 +41,7 @@ export class ExpressServer extends BaseServer implements IServer {
 
   private setupRoutes(routes: Route[]): void {
     routes.forEach((route) =>
-      this.app.use(route.handler(this.app, route.middlewares))
+      this.app.use(route.handler(this.router, route.middlewares))
     );
   }
 
