@@ -23,9 +23,10 @@ export interface IServer {
   app: ServerType;
   config: ServerConfig;
   router: Router;
+  routes: Route[];
 
   // setupMiddlewares?: () => void;
-  setupRoutes(routes: Route[]): void;
+  setRoutes(routes: Route[]): IServer;
 
   listen(cb: (...args: unknown[]) => void): Promise<void>;
 }
