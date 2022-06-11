@@ -16,8 +16,8 @@ export type ServerConfig = BaseServerConfig &
 export interface IServer {
   app: ServerType;
   config: ServerConfig;
-  setupMiddlewares?: () => void;
-  setupRoutes(): void;
+  // setupMiddlewares?: () => void;
+  // setupRoutes(): void;
   listen(cb: (...args: unknown[]) => void): Promise<void>;
 }
 
