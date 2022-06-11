@@ -5,6 +5,7 @@ import express, {
   Request,
   Response,
 } from "express";
+import { LogConfig, setupLogging } from "../utility";
 
 export type ServerType = Application;
 
@@ -12,6 +13,9 @@ type BaseServerConfig = {
   port: number;
   cb?: (...args: unknown[]) => void;
   globalErrorHandler?: () => void;
+  loggingConfig?: LogConfig;
+  logPath?: string;
+  errorLogPath?: string;
 };
 export type ExpressServerConfig = {};
 export type ServerConfig = BaseServerConfig & ExpressServerConfig;
@@ -49,5 +53,6 @@ export abstract class BaseServer
 
   constructor(config: ServerConfig) {
     this.config = config;
+    setupLogging(config.logPath, config.errorLogPath, config.loggingConfig);
   }
 }
