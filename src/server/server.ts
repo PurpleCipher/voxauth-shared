@@ -62,5 +62,11 @@ export abstract class BaseServer
     if (this.config.dbConfig) {
       this.database = DB.getInstance(this.config.dbConfig.dbUrl);
     }
+
+    if (this.database && !this.config.dbConfig?.isMultiTenant) {
+      this.database
+        .connect(this.config.dbConfig?.dbUrl || "")
+        .catch(console.error);
+    }
   }
 }
