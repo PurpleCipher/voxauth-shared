@@ -1,11 +1,11 @@
-import { Application } from "express";
+import express, { Application } from "express";
 import { BaseServer, IServer } from "./server";
 
-export abstract class ExpressServer extends BaseServer implements IServer {
-  abstract app: Application;
+export class ExpressServer extends BaseServer implements IServer {
+  app: Application = express();
 
-  abstract setupMiddlewares(): void;
-  abstract setupRoutes(): void;
+  // setupMiddlewares(): void {}
+  // setupRoutes(): void {}
 
   async listen(cb: (...args: unknown[]) => void): Promise<void> {
     this.app.listen(this.config.port, cb);
