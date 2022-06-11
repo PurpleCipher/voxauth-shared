@@ -1,6 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { BaseServer, IServer, Middleware, Route } from "./server";
 import { APIError } from "../utility";
+import { setDbConnection } from "../middleware";
 
 export class ExpressServer extends BaseServer implements IServer {
   app: Application = express();
@@ -34,6 +35,9 @@ export class ExpressServer extends BaseServer implements IServer {
   }
 
   private setupMiddlewares(middlewares: Middleware[]) {
+    if (this.config.dbConfig?.isMultiTenant && this.database) {
+      this.app.use(setDbConnection(this.database));
+    }
     middlewares.forEach((middleware) => {
       this.app.use(middleware);
     });

@@ -5,7 +5,7 @@ import express, {
   Request,
   Response,
 } from "express";
-import { LogConfig, setupLogging } from "../utility";
+import { DB, DBConfig, LogConfig, setupLogging } from "../utility";
 
 export type ServerType = Application;
 
@@ -16,6 +16,7 @@ type BaseServerConfig = {
   loggingConfig?: LogConfig;
   logPath?: string;
   errorLogPath?: string;
+  dbConfig?: DBConfig;
 };
 export type ExpressServerConfig = {};
 export type ServerConfig = BaseServerConfig & ExpressServerConfig;
@@ -36,6 +37,7 @@ export interface IServer {
   router: Router;
   routes: Route[];
   middleWares: Middleware[];
+  database?: DB;
   setRoutes(routes: Route[]): IServer;
   setMiddlewares(middlewares: Middleware[]): IServer;
   globalErrorHandler?: () => void;
@@ -43,7 +45,7 @@ export interface IServer {
 }
 
 export abstract class BaseServer
-  implements Pick<IServer, "app" | "config" | "router">
+  implements Pick<IServer, "app" | "config" | "router" | "database">
 {
   app: ServerType = express();
 
@@ -51,8 +53,14 @@ export abstract class BaseServer
 
   config: ServerConfig;
 
+  database?: DB;
+
   constructor(config: ServerConfig) {
     this.config = config;
     setupLogging(config.logPath, config.errorLogPath, config.loggingConfig);
+
+    if (this.config.dbConfig) {
+      this.database = DB.getInstance(this.config.dbConfig.dbUrl);
+    }
   }
 }
