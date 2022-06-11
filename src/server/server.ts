@@ -24,7 +24,7 @@ export interface IServer {
 export abstract class BaseServer implements Pick<IServer, "config"> {
   config: ServerConfig;
 
-  protected constructor(config: ServerConfig) {
+  constructor(config: ServerConfig) {
     this.config = config;
   }
 }
