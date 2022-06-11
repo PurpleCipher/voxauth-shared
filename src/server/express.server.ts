@@ -1,13 +1,12 @@
 import express, { Application } from "express";
-import { BaseServer, IServer, Route } from "./server";
+import { BaseServer, IServer, Middleware, Route } from "./server";
 
 export class ExpressServer extends BaseServer implements IServer {
   app: Application = express();
 
   routes: Route[] = [];
 
-  // setupMiddlewares(): void {}
-  // setupRoutes(): void {}
+  middleWares: Middleware[] = [];
 
   async listen(cb: (...args: unknown[]) => void): Promise<void> {
     this.setupRoutes(this.routes);
@@ -15,8 +14,19 @@ export class ExpressServer extends BaseServer implements IServer {
   }
 
   setRoutes(routes: Route[]): IServer {
-    this.routes = routes;
+    this.routes = [...routes];
     return this;
+  }
+
+  setMiddlewares(middlewares: Middleware[]): IServer {
+    this.middleWares = [...middlewares];
+    return this;
+  }
+
+  private setupMiddlewares() {
+    this.middleWares.forEach((middleware) => {
+      this.app.use(middleware);
+    });
   }
 
   private setupRoutes(routes: Route[]): void {

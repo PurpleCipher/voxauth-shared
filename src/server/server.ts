@@ -1,4 +1,10 @@
-import express, { Application, NextFunction, Router } from "express";
+import express, {
+  Application,
+  NextFunction,
+  Router,
+  Request,
+  Response,
+} from "express";
 
 export type ServerType = Application;
 
@@ -24,9 +30,11 @@ export interface IServer {
   config: ServerConfig;
   router: Router;
   routes: Route[];
+  middleWares: Middleware[];
 
   // setupMiddlewares?: () => void;
   setRoutes(routes: Route[]): IServer;
+  setMiddlewares(middlewares: Middleware[]): IServer;
 
   listen(cb: (...args: unknown[]) => void): Promise<void>;
 }
