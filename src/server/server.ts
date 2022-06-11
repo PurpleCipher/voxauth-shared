@@ -11,6 +11,7 @@ export type ServerType = Application;
 type BaseServerConfig = {
   port: number;
   cb?: (...args: unknown[]) => void;
+  globalErrorHandler?: () => void;
 };
 export type ExpressServerConfig = {};
 export type ServerConfig = BaseServerConfig & ExpressServerConfig;
@@ -31,11 +32,9 @@ export interface IServer {
   router: Router;
   routes: Route[];
   middleWares: Middleware[];
-
-  // setupMiddlewares?: () => void;
   setRoutes(routes: Route[]): IServer;
   setMiddlewares(middlewares: Middleware[]): IServer;
-
+  globalErrorHandler?: () => void;
   listen(cb: (...args: unknown[]) => void): Promise<void>;
 }
 
