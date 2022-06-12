@@ -16,6 +16,7 @@ jobs:
           npm ci
           npm run lint
           npm test
+          npm run build
   version-bump:
     needs: [test]
     if: github.event_name != 'pull_request'
