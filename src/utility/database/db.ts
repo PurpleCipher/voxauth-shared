@@ -1,5 +1,9 @@
 import * as mongoose from "mongoose";
-import { ConnectOptions } from "mongoose";
+import {
+  DBConnection,
+  DBConnectionStates,
+  DBConnectOptions,
+} from "../../types";
 
 export interface DBConfig {
   isMultiTenant: boolean;
@@ -11,9 +15,11 @@ export class DB {
 
   private readonly dbUrl?: string;
 
-  private connections: Record<string, mongoose.Connection> = {};
+  private connections: Record<string, DBConnection> = {};
 
-  private readonly dbOptions: ConnectOptions = {
+  connection?: DBConnection;
+
+  private readonly dbOptions: DBConnectOptions = {
     autoIndex: true,
     autoCreate: true,
   };
@@ -32,7 +38,7 @@ export class DB {
     return DB.instance;
   }
 
-  private createConnection(tenantId: string): mongoose.Connection {
+  private createConnection(tenantId: string): DBConnection {
     return mongoose.createConnection(
       `${this.dbUrl}/${tenantId}?retryWrites=true&w=majority`,
       this.dbOptions
@@ -54,10 +60,17 @@ export class DB {
   }
 
   public openConnection(tenantId: string) {
-    this.getConnection(tenantId);
+    this.getConnectionByTenantId(tenantId);
   }
 
-  public getConnection(tenantId: string): mongoose.Connection {
+  public getConnection(): DBConnection {
+    if (!this.connection) {
+      return new mongoose.Connection();
+    }
+    return this.connection;
+  }
+
+  public getConnectionByTenantId(tenantId: string): DBConnection {
     let connection = this.connections[tenantId];
     if (!connection) {
       console.error(`Connection to ${tenantId} is not initialized`);
@@ -88,12 +101,9 @@ export class DB {
     return "ok";
   }
 
-  private getConnectionStatuses(): Record<string, mongoose.ConnectionStates> {
+  private getConnectionStatuses(): Record<string, DBConnectionStates> {
     return Object.entries(this.connections).reduce(
-      (
-        acc: Record<string, mongoose.ConnectionStates>,
-        [tenantId, connection]
-      ) => {
+      (acc: Record<string, DBConnectionStates>, [tenantId, connection]) => {
         acc[tenantId] = connection.readyState;
         return acc;
       },
