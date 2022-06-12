@@ -4,15 +4,14 @@ import { DB } from "../utility";
 export const setDbConnection =
   (isMultiTenant: boolean, db: DB) =>
   (req: Request, res: Response, next: NextFunction) => {
-    const tenantId = req.headers["x-tenant-id"];
+    let tenantId = req.headers["x-tenant-id"];
     if (isMultiTenant && !tenantId) {
       res.status(401).json({ error: "Tenant ID is required" });
       return;
     }
 
     if (!isMultiTenant) {
-      next();
-      return;
+      tenantId = "default";
     }
 
     db.openConnection(tenantId as string);

@@ -52,13 +52,6 @@ export class DB {
     );
   }
 
-  public connect(dbName: string) {
-    return mongoose.connect(
-      `${this.dbUrl}/${dbName}?retryWrites=true&w=majority`,
-      this.dbOptions
-    );
-  }
-
   public openConnection(tenantId: string) {
     this.getConnectionByTenantId(tenantId);
   }
