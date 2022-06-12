@@ -59,7 +59,7 @@ export abstract class BaseServer
     this.config = config;
     setupLogging(config.logPath, config.errorLogPath, config.loggingConfig);
 
-    if (this.config.dbConfig) {
+    if (this.config.dbConfig && this.config.dbConfig.dbUrl) {
       this.database = DB.getInstance(this.config.dbConfig.dbUrl);
     }
 

@@ -24,15 +24,15 @@ export class DB {
     autoCreate: true,
   };
 
-  private constructor(dbUrl: string) {
+  private constructor(dbUrl?: string) {
     this.dbUrl = dbUrl;
   }
 
-  public static getInstance(dbUrl: string): DB {
+  public static getInstance(dbUrl?: string): DB {
     if (!DB.instance) {
       DB.instance = new DB(dbUrl);
     }
-    if (DB.instance.dbUrl !== dbUrl) {
+    if (!!dbUrl && DB.instance.dbUrl !== dbUrl) {
       DB.instance = new DB(dbUrl);
     }
     return DB.instance;
