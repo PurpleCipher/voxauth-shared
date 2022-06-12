@@ -13,6 +13,7 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "import/prefer-default-export": "off",
-    "import/no-default-export": "error"
+    "import/no-default-export": "error",
+    "no-console": "off"
   }
 }
