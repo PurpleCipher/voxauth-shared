@@ -35,8 +35,10 @@ export class ExpressServer extends BaseServer implements IServer {
   }
 
   private setupMiddlewares(middlewares: Middleware[]) {
-    if (this.config.dbConfig?.isMultiTenant && this.database) {
-      this.app.use(setDbConnection(this.database));
+    if (this.database) {
+      this.app.use(
+        setDbConnection(!!this.config.dbConfig?.isMultiTenant, this.database)
+      );
     }
     middlewares.forEach((middleware) => {
       this.app.use(middleware);
