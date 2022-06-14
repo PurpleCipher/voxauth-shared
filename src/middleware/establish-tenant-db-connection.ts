@@ -5,12 +5,8 @@ export const setDbConnection =
   (isMultiTenant: boolean, db: DB) =>
   (req: Request, res: Response, next: NextFunction) => {
     let tenantId = req.headers["x-tenant-id"];
-    if (isMultiTenant && !tenantId) {
-      res.status(401).json({ error: "Tenant ID is required" });
-      return;
-    }
 
-    if (!isMultiTenant) {
+    if (!isMultiTenant || !tenantId) {
       tenantId = "default";
     }
 
