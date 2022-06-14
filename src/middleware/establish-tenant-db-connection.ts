@@ -10,6 +10,10 @@ export const setDbConnection =
       tenantId = "default";
     }
 
-    db.openConnection(tenantId as string);
-    next();
+    try {
+      db.openConnection(tenantId as string);
+      next();
+    } catch (e) {
+      res.status(500).json({ error: "Failed to open database connection" });
+    }
   };
