@@ -7,4 +7,9 @@ export type Controller<T extends Service> = (service?: T) => {
     req: Request,
     key: "body" | "params" | "query" | "headers"
   ) => ParsedType;
+  respond: <PayloadType>(
+    res: Response,
+    status?: number,
+    payload?: PayloadType
+  ) => void;
 };
