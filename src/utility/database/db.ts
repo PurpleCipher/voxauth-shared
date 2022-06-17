@@ -8,10 +8,13 @@ import {
 export interface DBConfig {
   isMultiTenant: boolean;
   dbUrl: string;
+  dbName?: string;
 }
 
 export class DB {
   private static instance: DB;
+
+  private readonly dbName: string;
 
   private readonly dbUrl?: string;
 
@@ -24,23 +27,24 @@ export class DB {
     autoCreate: true,
   };
 
-  private constructor(dbUrl?: string) {
+  private constructor(dbUrl?: string, dbName = "default") {
     this.dbUrl = dbUrl;
+    this.dbName = dbName;
   }
 
-  public static getInstance(dbUrl?: string): DB {
+  public static getInstance(dbUrl?: string, dbName?: string): DB {
     if (!DB.instance) {
-      DB.instance = new DB(dbUrl);
+      DB.instance = new DB(dbUrl, dbName);
     }
     if (!!dbUrl && DB.instance.dbUrl !== dbUrl) {
-      DB.instance = new DB(dbUrl);
+      DB.instance = new DB(dbUrl, dbName);
     }
     return DB.instance;
   }
 
-  private createConnection(tenantId: string): DBConnection {
+  private createConnection(tenantId: string, dbName: string): DBConnection {
     return mongoose.createConnection(
-      `${this.dbUrl}/${tenantId}?retryWrites=true&w=majority`,
+      `${this.dbUrl}/${dbName}_${tenantId}?retryWrites=true&w=majority`,
       this.dbOptions
     );
   }
@@ -56,18 +60,11 @@ export class DB {
     this.getConnectionByTenantId(tenantId);
   }
 
-  public getConnection(): DBConnection {
-    if (!this.connection) {
-      return new mongoose.Connection();
-    }
-    return this.connection;
-  }
-
   public getConnectionByTenantId(tenantId: string): DBConnection {
     let connection = this.connections[tenantId];
     if (!connection) {
       console.error(`Connection to ${tenantId} is not initialized`);
-      connection = this.createConnection(tenantId);
+      connection = this.createConnection(tenantId, this.dbName);
       this.connections[tenantId] = connection;
     }
     return connection;
