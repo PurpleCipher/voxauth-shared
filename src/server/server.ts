@@ -5,6 +5,8 @@ import express, {
   Request,
   Response,
 } from "express";
+import { GetVerificationKey, IsRevoked, TokenGetter } from "express-jwt";
+import { Secret, Algorithm } from "jsonwebtoken";
 import { DB, DBConfig, LogConfig, setupLogging } from "../utility";
 
 export type ServerType = Application;
@@ -31,11 +33,22 @@ export type Route = {
   middlewares: Middleware[];
 };
 
+export type JWTParams = {
+  secret: Secret | GetVerificationKey;
+  getToken?: TokenGetter;
+  isRevoked?: IsRevoked;
+  credentialsRequired?: boolean;
+  requestProperty?: string;
+  algorithms: Algorithm[];
+};
+
 export interface IServer {
   app: ServerType;
   config: ServerConfig;
   router: Router;
   routes: Route[];
+  openRoutes: string[];
+  jwtConfig?: JWTParams;
   middleWares: Middleware[];
   database?: DB;
   setRoutes(routes: Route[]): IServer;

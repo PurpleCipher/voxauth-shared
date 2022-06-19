@@ -1,5 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { BaseServer, IServer, Middleware, Route } from "./server";
+import { expressjwt } from "express-jwt";
+import { BaseServer, IServer, JWTParams, Middleware, Route } from "./server";
 import { APIError } from "../utility";
 import { setDbConnection } from "../middleware";
 
@@ -9,6 +10,10 @@ export class ExpressServer extends BaseServer implements IServer {
   routes: Route[] = [];
 
   middleWares: Middleware[] = [];
+
+  openRoutes: string[] = [];
+
+  jwtConfig: JWTParams | undefined = undefined;
 
   globalErrorHandler?: () => void;
 
@@ -34,10 +39,25 @@ export class ExpressServer extends BaseServer implements IServer {
     return this;
   }
 
+  setJwtConfig(jwtConfig: JWTParams): IServer {
+    this.jwtConfig = jwtConfig;
+    return this;
+  }
+
+  setOpenRoutes(openRoutes: string[]): IServer {
+    this.openRoutes = [...openRoutes];
+    return this;
+  }
+
   private setupMiddlewares(middlewares: Middleware[]) {
     if (this.database) {
       this.app.use(
         setDbConnection(!!this.config.dbConfig?.isMultiTenant, this.database)
+      );
+    }
+    if (this.jwtConfig) {
+      this.app.use(
+        expressjwt(this.jwtConfig).unless({ path: this.openRoutes })
       );
     }
     middlewares.forEach((middleware) => {
