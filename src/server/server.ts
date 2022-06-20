@@ -52,7 +52,9 @@ export interface IServer {
   middleWares: Middleware[];
   database?: DB;
   setRoutes(routes: Route[]): IServer;
+  setJwtConfig(jwtConfig: JWTParams): IServer;
   setMiddlewares(middlewares: Middleware[]): IServer;
+  setOpenRoutes(openRoutes: string[]): IServer;
   globalErrorHandler?: () => void;
   listen(cb: (...args: unknown[]) => void): Promise<void>;
 }
