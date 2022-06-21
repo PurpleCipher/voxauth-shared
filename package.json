@@ -50,6 +50,7 @@
     "express-jwt": "^7.7.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6",
+    "pbac": "^0.3.1",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.7.1"
   }
