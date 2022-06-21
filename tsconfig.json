@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "moduleResolution": "Node"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/pbac.d.ts"],
   "exclude": ["node_modules", "src/**/*.spec.ts"]
 }
