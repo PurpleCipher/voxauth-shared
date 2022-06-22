@@ -1,6 +1,6 @@
 {
   "name": "@purplecipher/voxauth-shared",
-  "version": "1.6.11",
+  "version": "1.6.12",
   "description": "Common code for voxauth services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
