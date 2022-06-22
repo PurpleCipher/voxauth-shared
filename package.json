@@ -11,7 +11,7 @@
     "build": "tsc",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "format:staged": "pretty-quick --staged",
-    "lint": "eslint --ignore-path .eslintignore --ext .ts . && prettier --check ./src",
+    "lint": "eslint --ignore-path .eslintignore --ext .ts .",
     "test": "jest --passWithNoTests",
     "prepare": "husky install"
   },
@@ -50,7 +50,7 @@
     "express-jwt": "^7.7.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6",
-    "pbac": "^0.3.1",
+    "pbac": "^0.3.2",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.7.1"
   }
