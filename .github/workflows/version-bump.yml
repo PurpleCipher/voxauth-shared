@@ -17,6 +17,9 @@ jobs:
           npm run lint
           npm test
           npm run build
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_SECRET }}
   version-bump:
     needs: [test]
     if: github.event_name != 'pull_request'
