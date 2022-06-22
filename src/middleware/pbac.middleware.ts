@@ -18,7 +18,7 @@ export const policyMiddleware =
       return;
     }
 
-    const actionString = user ? user[scopeKey] : "";
+    const actionString = user[scopeKey];
     const actions: string[] = actionString.split(" ");
     const isAllowed = actions
       .map((action) => evaluator(policy, { action, resource, context: {} }))
