@@ -42,5 +42,13 @@ describe("Error handling", () => {
     it("should return an instance of APIError", () => {
       expect(apiError).toBeInstanceOf(APIError);
     });
+
+    it("should use default description", () => {
+      apiError = new APIError("error", undefined, undefined, undefined);
+
+      expect(apiError.message).toEqual("internal server error");
+      expect(apiError.httpCode).toEqual(HttpStatusCode.INTERNAL_SERVER);
+      expect(apiError.isOperational).toEqual(true);
+    });
   });
 });
