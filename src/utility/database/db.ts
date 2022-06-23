@@ -36,9 +36,6 @@ export class DB {
     if (!DB.instance) {
       DB.instance = new DB(dbUrl, dbName);
     }
-    if (!!dbUrl && DB.instance.dbUrl !== dbUrl) {
-      DB.instance = new DB(dbUrl, dbName);
-    }
     return DB.instance;
   }
 
