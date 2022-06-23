@@ -20,8 +20,7 @@ const baseRotationTransport = {
 export function setupLogging(
   errorPath?: string,
   logPath?: string,
-  config: LogConfig = baseRotationTransport,
-  env = process.env.NODE_ENV
+  config: LogConfig = baseRotationTransport
 ): void {
   const dailyErrorLogger = new Winston.transports.DailyRotateFile({
     filename: path.join(__dirname, errorPath ?? "../logs/error.log"),
@@ -38,7 +37,7 @@ export function setupLogging(
     transports: [dailyErrorLogger, dailyCombinedLogger],
   });
 
-  if (env !== "production") {
+  if (process.env.NODE_ENV !== "production") {
     winston.add(
       new Winston.transports.Console({
         format: Winston.format.combine(
