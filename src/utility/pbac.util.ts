@@ -4,7 +4,7 @@ import { Policy, PolicyEvaluationContext } from "../types";
 const PBAC = pbac;
 
 export type PolicyEvaluator = (
-  policy: Policy,
+  policy: Policy | Policy[],
   context: PolicyEvaluationContext
 ) => boolean;
 
