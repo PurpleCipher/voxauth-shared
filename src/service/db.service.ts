@@ -8,7 +8,7 @@ export interface DBService<D extends DBDocument> extends InitService {
   model?: DBModel<D>;
   getDbConnection: (tenantId?: string) => DBConnection;
   getModel: (name: string, schema: DBSchema) => DBModel<D>;
-  onConnect: (resolve: () => void) => void;
-  onDisconnect: (resolve: () => void) => void;
-  onError: (reject: () => void) => void;
+  onConnect?: (resolve: () => void) => void;
+  onDisconnect?: (resolve: () => void) => void;
+  onError?: (reject: () => void) => void;
 }
