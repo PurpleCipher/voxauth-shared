@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           minor-wording: "feat,feature"
-          patch-wording: "fix,bug,chore,style"
+          patch-wording: "fix,bug,chore,Chore,style"
           major-wording: "breaking,breaking-changes,MAJOR"
           rc-wording: "rc,release-candidate,alpha,beta,preview"
           default: prerelease
