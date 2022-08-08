@@ -1,3 +1,4 @@
+export { Attachment } from "./attachment";
 export { sendNotifications } from "./send-notification";
 export {
   EmailNotificationPayload,
