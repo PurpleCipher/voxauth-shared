@@ -1,9 +1,8 @@
 import axios from "axios";
 import { NotificationType } from "./notification.type";
-import { NotificationChannel } from "./channels";
 import { UserNotificationTopic } from "./topics";
-import SpyInstance = jest.SpyInstance;
 import { sendNotifications } from "./send-notification";
+import SpyInstance = jest.SpyInstance;
 
 jest.mock("axios");
 
@@ -23,7 +22,6 @@ describe("Send Notification", () => {
           payload: {
             to: "1234",
             from: "1234",
-            message: "Hello",
           },
         };
         await sendNotifications(clientName, port, [notification, notification]);
@@ -43,7 +41,6 @@ describe("Send Notification", () => {
           payload: {
             to: "1234",
             from: "1234",
-            message: "Hello",
           },
         };
         await sendNotifications(clientName, port, notification);
