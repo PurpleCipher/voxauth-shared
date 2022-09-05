@@ -17,12 +17,6 @@ export abstract class BaseDbService<T extends DBDocument>
 
   abstract maxDbRetries: number;
 
-  abstract onConnect?: (resolve: () => void) => void;
-
-  abstract onDisconnect?: (resolve: () => void) => void;
-
-  abstract onError?: (reject: () => void) => void;
-
   protected constructor(database: DB, schema: DBSchema, private name: string) {
     this.database = database;
     this.schema = schema;
@@ -58,7 +52,14 @@ export abstract class BaseDbService<T extends DBDocument>
     console.log("Database connection established");
   }
 
-  abstract getDbConnection(tenantId?: string): DBConnection;
+  getDbConnection(tenantId: string = "default"): DBConnection {
+    return this.database.getConnectionByTenantId(tenantId);
+  }
 
-  abstract getModel(name: string, schema: DBSchema): DBModel<T>;
+  getModel(name: string, schema: DBSchema): DBModel<T> {
+    if (!this.connection) {
+      throw new Error("Database connection is not initialized");
+    }
+    return this.connection.model(name, schema);
+  }
 }
