@@ -56,7 +56,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6",
     "pbac": "^0.3.2",
-    "winston": "^3.7.2",
+    "winston": "^3.8.1",
     "winston-daily-rotate-file": "^4.7.1"
   }
 }
