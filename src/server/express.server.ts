@@ -1,5 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { expressjwt } from "express-jwt";
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
 import { BaseServer, IServer, JWTParams, Middleware, Route } from "./server";
 import { APIError } from "../utility";
 import { setDbConnection } from "../middleware";
@@ -18,8 +20,31 @@ export class ExpressServer extends BaseServer implements IServer {
   globalErrorHandler?: () => void;
 
   async listen(cb: (...args: unknown[]) => void): Promise<void> {
+    if (this.config.sentryDsn) {
+      Sentry.init({
+        dsn: this.config.sentryDsn,
+        integrations: [
+          // enable HTTP calls tracing
+          new Sentry.Integrations.Http({ tracing: true }),
+          // enable Express.js middleware tracing
+          new Tracing.Integrations.Express({ app: this.app }),
+        ],
+
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 0.5,
+      });
+      this.app.use(Sentry.Handlers.requestHandler());
+      this.app.use(Sentry.Handlers.tracingHandler());
+    }
     this.setupMiddlewares(this.middleWares);
     this.setupRoutes(this.routes);
+
+    if (this.config.sentryDsn) {
+      this.app.use(Sentry.Handlers.errorHandler());
+    }
+
     if (!this.config.globalErrorHandler) {
       this.globalErrorHandler = this.errorHandlers;
     } else {

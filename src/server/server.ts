@@ -19,6 +19,7 @@ type BaseServerConfig = {
   logPath?: string;
   errorLogPath?: string;
   dbConfig?: DBConfig;
+  sentryDsn?: string;
 };
 export type ExpressServerConfig = {};
 export type ServerConfig = BaseServerConfig & ExpressServerConfig;
