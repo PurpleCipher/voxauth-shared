@@ -34,19 +34,24 @@ const getSecret: GetSecret = async <T>(
     if (!config) {
       throw e;
     }
-    const { retries, maxRetries, delay } = config ?? {
+    const { retries, maxRetries, delay } = {
       retries: 0,
       maxRetries: 10,
       delay: 2000,
+      ...config,
     };
 
-    await sleep(delay!);
+    if (retries >= maxRetries) {
+      throw e;
+    }
+
+    await sleep(delay);
 
     return getSecret(
       port,
       store,
       key,
-      { retries: retries! + 1, maxRetries, delay },
+      { retries: retries + 1, maxRetries, delay },
       responseMapper
     );
   }

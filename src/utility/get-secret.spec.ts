@@ -1,5 +1,5 @@
 import { getSecretFromDapr } from "./get-secret";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
 jest.mock("axios");
 
@@ -73,21 +73,46 @@ describe("Get secrets", () => {
 
     describe("Retry", () => {
       let mapper: jest.Mock = jest.fn().mockReturnValue({ mocked: true });
-      beforeEach(async () => {
-        axios.get = jest
-          .fn()
-          .mockRejectedValueOnce({} as AxiosError)
-          .mockResolvedValue({});
-        result = await getSecretFromDapr.getSecret(
-          3000,
-          "mongodb",
-          "user-cred",
-          { maxRetries: 2 },
-          mapper
-        );
+      describe("when retries not exceeded", () => {
+        beforeEach(async () => {
+          axios.get = jest
+            .fn()
+            .mockRejectedValueOnce({} as AxiosError)
+            .mockResolvedValue({});
+          result = await getSecretFromDapr.getSecret(
+            3000,
+            "mongodb",
+            "user-cred",
+            { maxRetries: 2 },
+            mapper
+          );
+        });
+        it("should be called twice", () => {
+          expect(axios.get).toBeCalledTimes(2);
+        });
       });
-      it("should be called twice", () => {
-        expect(axios.get).toBeCalledTimes(2);
+      describe("when retries are exceeded", () => {
+        beforeEach(() => {
+          axios.get = jest
+            .fn()
+            .mockRejectedValueOnce({} as AxiosError)
+            .mockRejectedValueOnce({} as AxiosError)
+            .mockRejectedValueOnce({} as AxiosError)
+            .mockResolvedValue({});
+          getSecretFromDapr
+            .getSecret(
+              3000,
+              "mongodb",
+              "user-cred",
+              { maxRetries: 2, retries: 2 },
+              mapper
+            )
+            .then(thenFn)
+            .catch(catchFn);
+        });
+        it("should throw error", () => {
+          expect(catchFn).toBeCalled();
+        });
       });
     });
   });
