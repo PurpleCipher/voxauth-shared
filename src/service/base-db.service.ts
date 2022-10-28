@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
-import { DBConnection, DBDocument, DBModel, DBSchema } from "../types";
+import {
+  DBConnection,
+  DBDocument,
+  DBModel,
+  DBPaginateModel,
+  DBSchema,
+} from "../types";
 import { DBService } from "./db.service";
 import { DB } from "../utility";
 import { InitService } from "./init.service";
@@ -11,7 +17,7 @@ export abstract class BaseDbService<T extends DBDocument>
 
   connection?: DBConnection;
 
-  model?: DBModel<T>;
+  model?: DBModel<T> | DBPaginateModel<T>;
 
   schema: DBSchema;
 
@@ -56,7 +62,7 @@ export abstract class BaseDbService<T extends DBDocument>
     return this.database.getConnectionByTenantId(tenantId);
   }
 
-  getModel(name: string, schema: DBSchema): DBModel<T> {
+  getModel(name: string, schema: DBSchema): DBModel<T> | DBPaginateModel<T> {
     if (!this.connection) {
       throw new Error("Database connection is not initialized");
     }
