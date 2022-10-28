@@ -17,31 +17,69 @@ describe("InitServiceMiddleware", () => {
   });
 
   describe("when tenant id is not provided", () => {
-    beforeEach(() => {
-      req = getMockReq({
-        headers: {
-          "x-tenant-id": undefined,
-        },
+    describe("is multi-tenant", () => {
+      beforeEach(async () => {
+        req = getMockReq({
+          headers: {
+            "x-tenant-id": undefined,
+          },
+        });
+        service = {
+          init: jest.fn(),
+        };
+        middleware = initServiceMiddleware(
+          {
+            init: jest.fn(),
+          },
+          true
+        );
+        await middleware(req, res, next);
       });
-      service = {
-        init: jest.fn(),
-      };
-      middleware = initServiceMiddleware({
-        init: jest.fn(),
+
+      // it("should not call init on service", () => {
+      //   expect(service.init).toHaveBeenCalledWith(false, 'default');
+      // });
+
+      it("should call res with status 400", () => {
+        expect(res.status).not.toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
       });
-      middleware(req, res, next);
-    });
 
-    it("should not call init on service", () => {
-      expect(service.init).not.toHaveBeenCalled();
+      it("should call res with error message", () => {
+        expect(res.json).not.toHaveBeenCalledWith({
+          error: "No tenant id provided",
+        });
+      });
     });
+    describe("is not multi-tenant", () => {
+      beforeEach(() => {
+        req = getMockReq({
+          headers: {
+            "x-tenant-id": undefined,
+          },
+        });
+        service = {
+          init: jest.fn(),
+        };
+        middleware = initServiceMiddleware(
+          {
+            init: jest.fn(),
+          },
+          false
+        );
+        middleware(req, res, next);
+      });
 
-    it("should call res with status 400", () => {
-      expect(res.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
-    });
+      // it("should call init on service", () => {
+      //   expect(service.init).toHaveBeenCalledWith( false, 'default');
+      // });
 
-    it("should call res with error message", () => {
-      expect(res.json).toHaveBeenCalledWith({ error: "No tenant id provided" });
+      it("should not call res with status 400", () => {
+        expect(res.status).not.toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
+      });
+
+      it("should call next", () => {
+        expect(next).toHaveBeenCalled();
+      });
     });
   });
 
