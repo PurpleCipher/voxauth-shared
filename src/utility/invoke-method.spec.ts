@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { invokeServiceMethodFromDapr } from "./invoke-method";
 
 jest.mock("axios");
