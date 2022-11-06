@@ -1,0 +1,13 @@
+# @format
+
+{
+  'singleQuote': true,
+  'arrowParens': 'always',
+  'printWidth': 120,
+  'insertPragma': true,
+  'tabWidth': 2,
+  'useTabs': true,
+  'quoteProps': 'consistent',
+  'trailingComma': 'all',
+  'bracketSpacing': true,
+}
